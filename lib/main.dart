@@ -3,10 +3,11 @@ import 'dart:ffi';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rider_flutter/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api/Api.dart';
 import 'api/ApiService.dart';
-import 'home.dart';
+import 'order.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
+        cardColor: Colors.orange,
         useMaterial3: true,
       ),
       home: LoginPage(),
@@ -58,18 +60,18 @@ class _LoginPageState extends State<LoginPage> {
             Transform(
               transform: Matrix4.translationValues(0, -60, 0),
               child: Card(
-                margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 30),
+                  padding: const EdgeInsets.only(bottom: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
                         height: 40,
-                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
                         alignment: Alignment.centerLeft,
                         child: Text(
                           '登录',
@@ -80,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Card(
-                        margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                        margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -102,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Card(
-                        margin: EdgeInsets.fromLTRB(16, 10, 16, 0),
+                        margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -124,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
                         child: ElevatedButton(
                           onPressed: () async {
                             if (phone.trim() == '' || password.trim() == '') {
@@ -136,13 +138,13 @@ class _LoginPageState extends State<LoginPage> {
                               homePage(context);
                             }
                           },
-                          child: Text(
-                            '登录',
-                            style: TextStyle(color: Colors.white),
-                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orangeAccent,
                             textStyle: TextStyle(fontSize: 16),
+                          ),
+                          child: const Text(
+                            '登录',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       )
@@ -159,7 +161,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    print("eeeeeeeeeeeeeeeeeeee");
     readLogin().then((value) => {
           if (value != null && value) {homePage(mContext)}
         });
@@ -168,7 +169,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("disposed");
     super.dispose();
   }
@@ -177,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
     saveLogin(true);
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => MyHomePage()),
     );
   }
 
