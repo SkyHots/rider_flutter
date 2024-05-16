@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rider_flutter/api/Api.dart';
+import 'package:rider_flutter/api/ApiService.dart';
 
 class UpdatePasswordPage extends StatefulWidget {
-
   UpdatePasswordPage({super.key});
 
   @override
@@ -15,16 +17,16 @@ class UpdatePasswordPage extends StatefulWidget {
 class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
   final TextEditingController _passwordController = TextEditingController();
 
-  final TextEditingController _passwordAgainController = TextEditingController();
+  final TextEditingController _passwordAgainController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Center(
-          child: Text('修改密码'),
-        ),
+        centerTitle: true,
+        title: Text('修改密码'),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -59,15 +61,29 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                       child: SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            String pass = _passwordController.text.trim();
+                          onPressed: () async {
+                            String newPassword =
+                                _passwordController.text.trim();
                             String passAgain =
                                 _passwordAgainController.text.trim();
-                            if (pass != "" && passAgain != "") {
-                              if (pass != passAgain) {
+                            if (newPassword != "" && passAgain != "") {
+                              if (newPassword != passAgain) {
                                 Fluttertoast.showToast(msg: '两次输入密码不一致');
                               } else {
-                                Navigator.pop(context);
+                                EasyLoading.show();
+                                Map<String, dynamic> data = {
+                                  "id": "undefined",
+                                  "newPassword": newPassword
+                                };
+                                try {
+                                  var res = await ApiService.put(
+                                      Api.UPDATE_PASSWORD, data);
+                                  Navigator.pop(context);
+                                  EasyLoading.dismiss();
+                                } catch (e) {
+                                  EasyLoading.dismiss();
+                                  Fluttertoast.showToast(msg: Api.ERROR);
+                                }
                               }
                             } else {
                               Fluttertoast.showToast(msg: '请输入密码');
@@ -124,38 +140,6 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomActionBar extends StatelessWidget {
-  const CustomActionBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: kToolbarHeight,
-      color: Colors.transparent,
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back),
-          ),
-          const Center(
-            child: Text(
-              '修改密码',
-              style: TextStyle(
-                color: Colors.black87,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )
         ],
       ),
     );

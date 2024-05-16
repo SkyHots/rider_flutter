@@ -24,6 +24,7 @@ class ApiService {
 
 
   static Future<Response> put(String url, dynamic data) async {
+    print(data.toString());
     try {
       Response response = await _dio.put(url, data: data);
       return response;

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:rider_flutter/edit_password.dart';
 import 'package:rider_flutter/main.dart';
+import 'package:rider_flutter/qulifaction.dart';
+import 'package:rider_flutter/widget/CustomDialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -31,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
             alignment: Alignment.center,
             child: Text(
               '我的',
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -70,7 +72,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print("上传");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const PassQualificationUploadPage()));
                   },
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(20, 10, 20, 5),
@@ -188,34 +194,20 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          backgroundColor: Colors.white,
-          // 设置背景色
-          title: const Text('退出登录'),
-          content: Text('确定要退出吗？'),
-          shadowColor: Colors.orange,
-          actions: [
-            TextButton(
-              child: const Text('取消'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('确定'),
-              onPressed: () {
-                saveLogin(false);
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
-              },
-            ),
-          ],
+        return CustomDialog(
+          title: "退出登录",
+          content: "确定要退出吗？",
+          onConfirm: () {
+            saveLogin(false);
+            Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
         );
       },
     );
